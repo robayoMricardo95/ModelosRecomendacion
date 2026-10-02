@@ -1,0 +1,13 @@
+name: recsys
+channels:
+  - rapidsai
+  - conda-forge
+dependencies:
+  - python=3.11
+  - cuda-version=13.1
+  - implicit=0.7.3
+  - implicit-proc=*=gpu
+  - cuda-cudart
+  - libcublas
+  - librmm=26.04.00
+  - rmm=26.04

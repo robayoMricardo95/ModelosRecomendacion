@@ -1,0 +1,24 @@
+# Datos (licencia no comercial: no se redistribuyen)
+data/
+outputs/
+*.csv
+*.parquet
+
+# Credenciales
+.kaggle/
+kaggle.json
+access_token
+.env
+
+# Entorno
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Sistema
+.DS_Store
+Thumbs.db
