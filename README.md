@@ -6,7 +6,9 @@ Este repositorio tiene tres partes:
 2. **Un modelo real**: ALS implicit entrenado sobre el dataset público de Instacart (3,4 millones de órdenes), comparado contra popularidad y recompra, con ajuste de hiperparámetros en Optuna. Resultado: la recompra gana en la próxima canasta y ALS gana en descubrimiento (+22 % de NDCG@10 sobre popularidad).
 3. **Un resumen técnico y de negocio** de cómo estos métodos se combinan en un motor de recomendación de supermercado.
 
-> Todos los números de este README salen de ejecutar el código del repositorio. Los del caso de juguete son reproducibles con `python fundamentos/generar_datos.py && python fundamentos/metodos.py`.
+> 🔎 **[Recorrido visual interactivo](https://robayomricardo95.github.io/ModelosRecomendacion/)** · **[Notebook de los 10 métodos](fundamentos/recorrido.ipynb)**
+
+> Todos los números de este README salen de ejecutar el código del repositorio. Los del caso de juguete se reproducen con los comandos de la sección *Cómo reproducir*.
 
 ---
 
@@ -48,31 +50,67 @@ Cinco clientes, seis productos. Ana, Beto y Dani compran desayuno; Caro y Eva co
 
 *(veces que compró cada producto en el mes)*
 
-La respuesta que daría una persona: Leche y Cereal, nunca Pañales. Esto es lo que respondió cada método:
+La respuesta que daría una persona: **Leche y Cereal, nunca Pañales.** Esto es lo que respondió cada método:
 
-| # | Método | Le recomienda a Beto | Puntaje de Pañales | Qué se aprende |
-|---|---|---|---|---|
-| 1 | Apriori | Cereal (lift Pan → Cereal = 1.67) | — | Pan → Leche tiene lift 0.83: el pan no "jala" leche en general |
-| 2 | Vecindario | Leche = Cereal (1.00) | 0.00 | Personaliza, pero empata. Beto y Caro tienen similitud 0 |
-| 3 | SVD (k = 2) | Cereal 0.52 > Leche 0.30 | −0.21 | Dos patrones explican casi todo (valores singulares 2.95 y 2.20) |
-| 4 | Funk | Todo ≈ 0.97 | 0.96 | Sin negativos el modelo colapsa |
-| 5 | ALS explícito | Todo ≈ 0.94 | 0.93 | Mismo colapso: ALS cambia el cómo, no el qué |
-| 6 | **ALS implicit** (α = 10) | **Cereal 0.74 > Leche 0.31** | **−0.41** | Primer método que acierta y ordena |
-| 7 | Contenido | Cereal = Avena (0.87) > Leche 0.71 | 0.00 | Recomienda Avena, que **nunca se vendió** |
-| 8 | Two-Tower | Avena 0.84 > Cereal 0.69 > Leche 0.60 | 0.02 | Resuelve producto nuevo y cliente nuevo* |
-| 9 | GRU4Rec | Con el carrito Pan → Cereal: **Leche 0.79** | 0.01 | Responde "qué agrega ahora" |
-| 10 | SASRec | Con el carrito Pan → Cereal: **Leche 0.77** | 0.01 | Igual, y los pesos de atención se pueden leer |
+![Qué le recomienda cada método a Beto](fundamentos/resultados/figuras/01_resumen_beto.png)
 
-\* A **Fede**, un cliente nuevo con una sola compra (Pañales), Two-Tower le recomienda Toallitas 0.89 y Leche 0.63. Por contenido, la Leche solo llegaba a 0.41: la diferencia viene de lo que el modelo aprendió de otros clientes.
+> 🔎 **Más detalle:** [recorrido visual paso a paso](https://robayomricardo95.github.io/ModelosRecomendacion/) (definiciones, fórmulas y cálculos) · [notebook con el código y las salidas de cada método](fundamentos/recorrido.ipynb)
 
-**El contexto cambia la respuesta (métodos 9 y 10).** Dos carritos que terminan en el mismo producto reciben recomendaciones distintas:
+### Métodos 1 y 2 · Contar y comparar
 
-| Carrito actual | GRU4Rec | SASRec | Atención de SASRec |
-|---|---|---|---|
-| Pan → Leche | Cereal 0.86 | Cereal 0.86 | 67% Pan / 33% Leche |
-| Pañales → Leche | Toallitas 0.88 | Toallitas 0.88 | 44% Pañales / 56% Leche |
+**1 · Apriori.** Cuenta qué productos aparecen juntos y arma reglas con soporte, confianza y lift.
+- **Resultado:** Pan → Cereal tiene lift 1,67, así que a Beto le sugiere Cereal. Pan → Leche tiene lift 0,83 (menor que 1): el pan no "jala" leche en general.
+- **Falla:** le daría la misma respuesta a cualquiera que lleve pan. Describe la tienda, no a la persona.
 
-En el segundo carrito la atención no se concentra en Pañales y aun así el modelo acierta, porque la información también fluye por otras capas. **La atención es una pista de qué miró el modelo, no una explicación completa.**
+**2 · Vecindario.** Compara la canasta de Beto con la de cada cliente (similitud coseno) y promedia lo que compraron sus vecinos.
+- **Resultado:** Ana (0,71) y Dani (0,41) son sus vecinos; Caro y Eva dan 0. Leche y Cereal empatan en 1,00 y Pañales queda en 0.
+- **Falla:** empata, y entre clientes sin compras en común la similitud es 0 aunque se conecten a través de un tercero. Con catálogos reales casi todo da 0, y comparar todos contra todos crece al cuadrado.
+
+![Apriori y vecindario](fundamentos/resultados/figuras/02_apriori_vecindario.png)
+
+### Métodos 3 a 6 · Comprimir en patrones (factorización matricial)
+
+**3 · SVD.** Descompone la matriz en patrones ocultos y la reconstruye con los dos más fuertes (valores singulares 2,95 y 2,20; el resto suma poco).
+- **Resultado:** Cereal 0,52 > Leche 0,30, y Pañales −0,21. Rompe el empate y la información de Ana y Dani llega a Beto a través del patrón "desayuno".
+- **Falla:** trata todo lo no comprado como 0 = "no le gusta", y por eso empuja hacia abajo justo lo que queremos recomendar.
+
+**4 · SVD de Funk.** Aprende los embeddings con descenso de gradiente, solo sobre las celdas conocidas.
+- **Resultado:** todo ≈ 0,97, Pañales incluido (0,96).
+- **Falla:** con compras solo existen "sí". Sin negativos, la salida más fácil es predecir 1 en todas partes.
+
+**5 · ALS (explícito).** El mismo objetivo que Funk, resuelto por turnos con una regresión exacta.
+- **Resultado:** todo entre 0,93 y 0,95. Mismo colapso.
+- **Aprendizaje:** ALS cambia el *cómo* se calcula (rápido y paralelizable), no el *qué* se optimiza.
+
+**6 · ALS implicit.** Usa todas las celdas con una confianza c = 1 + α·veces (α = 10): un hueco es un "no" débil y una compra repetida, un "sí" fuerte.
+- **Resultado:** **Cereal 0,74 > Leche 0,31, Pañales −0,41.** Es el primer método que acierta y ordena. La pérdida baja de 60,6 a 12,3 en 15 vueltas.
+- **Falla:** no puede puntuar productos ni clientes nuevos, y no usa atributos ni el orden de las compras.
+
+![Factorizaciones: SVD, Funk, ALS y ALS implicit](fundamentos/resultados/figuras/03_factorizaciones.png)
+
+### Métodos 7 y 8 · Lo nuevo: Avena (sin ventas) y Fede (una sola compra)
+
+**7 · Basado en contenido.** El perfil de Beto es el promedio de los atributos de lo que compró; recomienda los productos más parecidos.
+- **Resultado:** Cereal = Avena (0,87) > Leche 0,71. **La Avena entra sin una sola venta.** A Fede le sugiere Toallitas (1,00) y algo de Leche (0,41).
+- **Falla:** solo "más de lo mismo". No distingue productos con las mismas etiquetas ni aprende del comportamiento de otros clientes.
+
+**8 · Two-Tower.** Dos redes (cliente y producto) producen embeddings y P(compra) = σ(u·v). Se entrena con 200 clientes simulados.
+- **Resultado:** a Beto, Avena 0,84 > Cereal 0,69 > Leche 0,60. A Fede, Toallitas 0,89 y Leche 0,63. La Leche de Fede sube de 0,41 a 0,63 porque el modelo aprendió de otros clientes que el grupo de bebé compra leche.
+- **Falla:** ve al cliente como una bolsa de compras, sin orden ni momento. Le sigue sugiriendo Cereal aunque Beto ya lo tenga en el carrito.
+
+![Contenido y Two-Tower ante lo nuevo](fundamentos/resultados/figuras/04_cold_start.png)
+
+### Métodos 9 y 10 · El carrito de ahora
+
+**9 · GRU4Rec.** Lee el carrito en orden con una memoria (GRU) y predice el siguiente producto. Se entrena con 600 carritos simulados.
+- **Resultado:** con el carrito Pan → Cereal, **Leche 0,79.** Dos carritos que terminan en Leche reciben respuestas distintas: después de Pan → Leche sugiere Cereal (0,86); después de Pañales → Leche, Toallitas (0,88).
+- **Falla:** toda la sesión se comprime en un vector que se reescribe en cada paso; en carritos largos lo del principio se diluye.
+
+**10 · SASRec.** Con atención, en cada paso mira directamente a todos los productos anteriores y los pondera.
+- **Resultado:** Leche 0,77, con las mismas respuestas que GRU4Rec en los otros carritos. En Pan → Leche, el 67 % de la atención va al Pan. En Pañales → Leche la atención se reparte (44 % / 56 %) y aun así acierta Toallitas: **la atención es una pista de qué miró el modelo, no una explicación completa.**
+- **Falla:** necesita mucho dato y la versión base solo usa IDs, así que tampoco resuelve lo nuevo.
+
+![GRU4Rec y SASRec](fundamentos/resultados/figuras/05_secuencias.png)
 
 ### Notas honestas sobre el caso de juguete
 
@@ -80,7 +118,6 @@ En el segundo carrito la atención no se concentra en Pañales y aun así el mod
 - Con 5 clientes una red neuronal solo memoriza. Por eso **Two-Tower se entrena con 200 clientes simulados** (120 de desayuno y 80 de bebé, con probabilidades de compra por segmento), y **GRU4Rec y SASRec con 600 carritos ordenados simulados** a partir de 7 plantillas, con un 30% de ruido.
 - El objetivo de esta parte es mostrar el razonamiento entre métodos, no comparar su rendimiento. Para eso está la parte 3.
 
-📄 Recorrido completo con definiciones, fórmulas y cálculos paso a paso: [`docs/recorrido.html`](docs/recorrido.html)
 
 ---
 
@@ -182,17 +219,21 @@ ModelosRecomendacion/
 ├── README.md
 ├── requirements.txt
 ├── docs/
-│   └── recorrido.html            ← recorrido visual de los 10 métodos
+│   └── index.html                ← recorrido visual (publicado con GitHub Pages)
 ├── fundamentos/                  ← caso de juguete (parte 2)
 │   ├── generar_datos.py          ← crea la base con semillas fijas
 │   ├── metodos.py                ← una función por método
+│   ├── figuras.py                ← gráficos del README
+│   ├── recorrido.ipynb           ← notebook con cada método y sus salidas
+│   ├── construir_notebook.py     ← regenera y ejecuta el notebook
 │   ├── datos/
 │   │   ├── productos.csv         (7 productos × 5 atributos; Avena es nueva)
 │   │   ├── compras.csv           (5 clientes del ejemplo)
 │   │   ├── clientes_simulados.csv (200 clientes, para Two-Tower)
 │   │   └── carritos_simulados.csv (600 carritos ordenados, para GRU4Rec y SASRec)
 │   └── resultados/
-│       └── resultados.json       ← todos los números de la parte 2
+│       ├── resultados.json       ← todos los números de la parte 2
+│       └── figuras/              ← PNG usados en este README
 └── aplicacion/
     └── als_instacart.ipynb       ← caso real (parte 3)
 ```
@@ -203,6 +244,7 @@ ModelosRecomendacion/
 pip install -r requirements.txt
 python fundamentos/generar_datos.py
 python fundamentos/metodos.py      # ~20 s en CPU, sin GPU
+python fundamentos/figuras.py      # gráficos del README
 ```
 
 Las redes pequeñas (Two-Tower, GRU4Rec, SASRec) están escritas a mano con `autograd`, sin PyTorch, para que cada fórmula del recorrido se vea directamente en el código.
