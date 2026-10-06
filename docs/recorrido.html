@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Qué le recomendamos a Beto?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: cuaderno de una sola columna; cada método es un capítulo con definiciones → fórmula → cálculo → resultado para Beto → falla */
+:root{
+  --bg:#f6f7f5; --surface:#ffffff; --fg:#1b2420; --muted:#5d6b64; --line:#d9dfdb;
+  --accent:#1d7a4f; --accent-soft:#e3f1e9; --warn:#b3471d; --warn-soft:#f8e7df; --mark:#f3d55b;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121815; --surface:#1a221e; --fg:#e4ebe7; --muted:#9aaaa2; --line:#2e3a34;
+  --accent:#4cc38a; --accent-soft:#1d3329; --warn:#f08a5d; --warn-soft:#3a2219; --mark:#8a7420; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121815; --surface:#1a221e; --fg:#e4ebe7; --muted:#9aaaa2; --line:#2e3a34;
+  --accent:#4cc38a; --accent-soft:#1d3329; --warn:#f08a5d; --warn-soft:#3a2219; --mark:#8a7420; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);padding-inline:16px;padding-block:24px 64px}
+main{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,6vw,2.8rem);font-weight:700}
+h2{font-size:1.65rem;font-weight:700}
+h3{font-size:1.05rem;font-weight:700;margin-top:4px}
+p{margin:0;max-width:65ch}
+section{display:flex;flex-direction:column;gap:16px}
+.eyebrow{font:500 .78rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.lede{font-size:1.1rem;color:var(--muted)}
+.defs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.def{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;min-width:0}
+.def b{display:block;font-family:var(--display);font-size:1rem;margin-bottom:2px}
+.def span{color:var(--muted);font-size:.93rem}
+.formula{font:500 .98rem/1.7 var(--mono);background:var(--accent-soft);border-radius:6px;padding:12px 14px;overflow-x:auto;white-space:pre}
+.steps{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px;max-width:65ch}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;font:400 .9rem var(--mono);font-variant-numeric:tabular-nums}
+th,td{padding:7px 10px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font:600 .78rem var(--body);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+td.name,th.name{text-align:left;font-family:var(--body);font-weight:600;color:var(--fg);text-transform:none;letter-spacing:0;font-size:.9rem}
+tr.beto td.name{background:var(--mark)}
+td.hole{outline:2px dashed var(--accent);outline-offset:-4px}
+.verdict{border-left:4px solid var(--accent);padding:4px 0 4px 14px;display:flex;flex-direction:column;gap:4px}
+.verdict b{font-family:var(--display)}
+.fail{background:var(--warn-soft);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.fail b{color:var(--warn);font-family:var(--display)}
+.bridge{font-size:.92rem;color:var(--muted);font-style:italic}
+.legend{font-size:.85rem;color:var(--muted)}
+.legend i{display:inline-block;width:14px;height:14px;vertical-align:-2px;outline:2px dashed var(--accent);outline-offset:-3px;margin-right:4px}
+svg text{fill:var(--fg);font-family:var(--body)}
+.bars{display:flex;flex-direction:column;gap:6px;max-width:420px}
+.bar{display:grid;grid-template-columns:88px 1fr 44px;align-items:center;gap:8px;font-size:.88rem}
+.bar div{height:14px;background:var(--accent);border-radius:3px}
+.bar .dim{background:var(--line)}
+.bar span:last-child{font-family:var(--mono);text-align:right}
+.intro{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:grid;gap:14px}
+.intro div{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:baseline}
+.intro div>span{font:600 .75rem var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.intro div.lim>span{color:var(--warn)}
+.intro div.mej>span{color:var(--accent)}
+.intro p{min-width:0}
+@media (max-width:560px){.intro div{grid-template-columns:1fr;gap:2px}}
+nav{display:flex;flex-wrap:wrap;gap:6px}
+nav a{font:500 .85rem var(--body);color:var(--fg);text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:4px 12px;background:var(--surface)}
+nav a:hover,nav a:focus-visible{border-color:var(--accent);outline:none}
+</style>
+</head>
+<body>
+
+<main>
+<header style="display:flex;flex-direction:column;gap:14px">
+  <span class="eyebrow">Sistemas de recomendación · un solo ejemplo, diez métodos</span>
+  <h1>¿Qué le recomendamos a Beto?</h1>
+  <p class="lede">Cinco clientes de un supermercado, seis productos y una sola pregunta. La pasamos por cada método en el orden en que se inventaron. Cada uno arregla algo que el anterior no podía hacer. Todos los números de esta página salen de ejecutar el código del repositorio (fundamentos/metodos.py).</p>
+  <nav>
+    <a href="#datos">Los datos</a><a href="#apriori">1 · Apriori</a><a href="#vecindario">2 · Vecindario</a><a href="#svd">3 · SVD</a><a href="#funk">4 · Funk</a><a href="#als">5 · ALS</a><a href="#implicit">6 · ALS implicit</a><a href="#contenido">7 · Contenido</a><a href="#twotower">8 · Two-Tower</a><a href="#gru">9 · GRU4Rec</a><a href="#sasrec">10 · SASRec</a><a href="#resumen">Resumen</a>
+  </nav>
+</header>
+
+<section id="datos">
+  <span class="eyebrow">Punto de partida</span>
+  <h2>Los datos</h2>
+  <p>Cuántas veces compró cada cliente cada producto en el último mes:</p>
+  <div class="tbl" id="t-conteo"></div>
+  <p>A simple vista hay dos tipos de cliente. Ana, Beto y Dani compran <b>desayuno</b>. Caro y Eva compran <b>cosas de bebé</b>. La leche la compran casi todos.</p>
+  <p>La mayoría de métodos no usa los conteos, solo si compró o no (1 / 0). A esa tabla la llamamos <b>matriz de interacciones</b>:</p>
+  <div class="tbl" id="t-bin"></div>
+  <p class="legend"><i></i>Huecos de Beto: productos que nunca compró. Ahí vive la recomendación.</p>
+  <div class="verdict"><b>La respuesta que un humano daría</b><p>Beto se parece a Ana y a Dani, que además compran Leche y Cereal. Recomendarle Pañales no tiene sentido. Veamos qué método llega a esta conclusión, y por qué.</p></div>
+</section>
+
+<section id="apriori">
+  <span class="eyebrow">Método 1 · años 90 · reglas de asociación</span>
+  <h2>Apriori: contar qué va junto</h2>
+  <div class="intro">
+    <div><span>Qué hace</span><p>Revisa todas las canastas de compra y cuenta qué productos aparecen juntos más seguido de lo normal. Con esos conteos arma reglas del tipo "quien lleva pan, también lleva mantequilla". No mira quién compra, solo qué se compra junto.</p></div>
+    <div class="mej"><span>Cómo mejora</span><p>Es el punto de partida. Antes de Apriori, encontrar combinaciones frecuentes significaba probar todas las parejas, tríos y cuartetos posibles. Su aporte es descartar temprano las combinaciones raras, lo que lo hace viable con miles de productos.</p></div>
+    <div class="lim"><span>Su limitación</span><p>No personaliza. Describe a la tienda, no a la persona: a todos los que llevan pan les sugiere lo mismo. Sirve para abastecer, armar combos y acomodar góndolas, pero no para predecir qué comprará un cliente concreto.</p></div>
+  </div>
+  <h3>Definiciones</h3>
+  <div class="defs">
+    <div class="def"><b>Canasta</b><span>El conjunto de productos de una compra. Aquí, una fila por cliente.</span></div>
+    <div class="def"><b>Soporte</b><span>Qué fracción de canastas contiene algo. Mide qué tan común es.</span></div>
+    <div class="def"><b>Confianza</b><span>De las canastas con A, qué fracción también tiene B.</span></div>
+    <div class="def"><b>Lift</b><span>Cuánto más aparecen juntos A y B de lo que esperarías por azar. Mayor que 1 indica afinidad.</span></div>
+  </div>
+  <h3>Cómo se combinan</h3>
+  <div class="formula">soporte(A,B)  = canastas con A y B / total
+confianza(A→B) = soporte(A,B) / soporte(A)
+lift(A→B)     = confianza(A→B) / soporte(B)</div>
+  <p>Ejemplo con Pan → Mantequilla: aparecen juntos en 2 de 5 canastas (soporte 0.4). El Pan está en 3 de 5 (0.6), así que la confianza es 0.4 / 0.6 = 0.67. La Mantequilla sola está en 0.4, así que el lift es 0.67 / 0.4 = <b>1.67</b>.</p>
+  <p>El nombre "Apriori" viene de su truco para no probar todas las combinaciones: si un producto solo ya es raro, cualquier combinación que lo incluya también lo será, así que la descarta antes de contarla.</p>
+  <div class="tbl" id="t-reglas"></div>
+  <div class="verdict"><b>Qué le dice a Beto</b><p>Beto lleva Pan, y la regla Pan → Cereal tiene lift 1.67, así que le sugiere <b>Cereal</b>. Pan → Leche tiene lift 0.83 (menor que 1), así que no le sugiere Leche.</p></div>
+  <div class="fail"><b>Lo que no puede hacer</b><p>Le daría exactamente la misma respuesta a <i>cualquiera</i> que lleve pan. Describe cómo compra la tienda en general, no quién es Beto. Sirve para acomodar góndolas, armar combos o abastecer inventario, pero no para predecir la próxima compra de una persona.</p></div>
+  <p class="bridge">→ Necesitamos usar la historia de cada cliente: personalizar.</p>
+</section>
+
+<section id="vecindario">
+  <span class="eyebrow">Método 2 · filtrado colaborativo por vecindario</span>
+  <h2>Vecindario: buscar gente parecida</h2>
+  <div class="intro">
+    <div><span>Qué hace</span><p>Es el primer filtrado colaborativo. Toma la canasta histórica de cada cliente como un vector y la compara contra la de todos los demás con similitud coseno. Encuentra a los clientes más parecidos a Beto (sus "vecinos") y le recomienda lo que ellos compraron y él todavía no, dando más peso a los que más se le parecen.</p></div>
+    <div class="mej"><span>Cómo mejora</span><p>Personaliza. Ya no responde "qué se compra junto", sino "qué compraría esta persona" usando su propia historia. Dos clientes con pan reciben recomendaciones distintas si sus historias son distintas.</p></div>
+    <div class="lim"><span>Su limitación</span><p>Solo ve coincidencias directas: si dos clientes no compraron nada igual, su similitud es 0, aunque se conecten a través de un tercero. Con catálogos grandes casi todo da 0. Además compara a todos contra todos, y con un millón de clientes eso es un billón de comparaciones.</p></div>
+  </div>
+  <h3>Definiciones</h3>
+  <div class="defs">
+    <div class="def"><b>Vector del cliente</b><span>Su fila de la matriz. Beto = [1, 1, 0, 0, 0, 0].</span></div>
+    <div class="def"><b>Producto punto</b><span>Multiplicar posición por posición y sumar. Cuenta los productos en común.</span></div>
+    <div class="def"><b>Similitud coseno</b><span>El producto punto dividido por el tamaño de cada vector. Va de 0 (nada en común) a 1 (idénticos).</span></div>
+    <div class="def"><b>Promedio ponderado</b><span>Promedio donde la opinión de cada vecino pesa según cuánto se parece a ti.</span></div>
+  </div>
+  <h3>Cómo se combinan</h3>
+  <div class="formula">sim(Beto, Ana) = (Beto · Ana) / (|Beto| × |Ana|)
+             = 2 / (√2 × √4) = 0.71
+
+puntaje(Beto, producto) =
+   Σ sim(Beto, vecino) × compró(vecino, producto)
+   ───────────────────────────────────────────────
+              Σ sim(Beto, vecino)</div>
+  <ol class="steps">
+    <li>Calculas la similitud de Beto con cada cliente.</li>
+    <li>Para cada producto, promedias lo que compraron los demás, pesando más a los más parecidos.</li>
+    <li>Recomiendas los huecos con puntaje más alto.</li>
+  </ol>
+  <div class="tbl" id="t-sim"></div>
+  <div class="tbl" id="t-vec"></div>
+  <div class="verdict"><b>Qué le dice a Beto</b><p><b>Leche y Cereal</b>, empatados en 1.0. Pañales y Toallitas en 0. Ya es personal: Caro con pan recibiría otra cosa.</p></div>
+  <div class="fail"><b>Lo que no puede hacer</b>
+    <p><b>Empates y ceros.</b> Beto y Caro dan similitud 0, aunque podrían conectarse a través de Ana. Con datos reales, donde cada cliente compra 30 de 20 000 productos, casi todas las similitudes son 0.</p>
+    <p><b>Costo.</b> Compara a todos contra todos: un millón de clientes son un billón de pares.</p>
+  </div>
+  <p class="bridge">→ Necesitamos resumir a cada cliente en pocos números que capturen patrones, no productos sueltos.</p>
+</section>
+
+<section id="svd">
+  <span class="eyebrow">Método 3 · álgebra lineal clásica</span>
+  <h2>SVD: comprimir en patrones ocultos</h2>
+  <div class="intro">
+    <div><span>Qué hace</span><p>Deja de comparar clientes uno a uno. Toma la matriz completa de clientes × productos y la descompone en unos pocos patrones ocultos (por ejemplo "desayuno" y "bebé"). Cada cliente y cada producto queda resumido en pocos números, su embedding, y la recomendación sale de multiplicar el embedding del cliente por el del producto.</p></div>
+    <div class="mej"><span>Cómo mejora</span><p>Encuentra conexiones indirectas: la información viaja entre clientes a través de los patrones compartidos, aunque no hayan comprado nada idéntico. Rompe empates y no necesita comparar todos los pares. Aquí nacen los embeddings.</p></div>
+    <div class="lim"><span>Su limitación</span><p>Necesita la matriz llena, así que trata cada producto no comprado como un 0, es decir "no le gusta". Confunde "no lo conoce" con "lo rechaza" y empuja hacia abajo justo lo que queríamos recomendar. Además es costoso de recalcular con millones de filas.</p></div>
+  </div>
+  <h3>Definiciones</h3>
+  <div class="defs">
+    <div class="def"><b>Factorizar</b><span>Escribir una matriz como producto de otras más simples, como 12 = 3 × 4.</span></div>
+    <div class="def"><b>Patrón latente</b><span>Un eje de gusto que nadie nombró pero que explica muchas compras a la vez: "desayuno", "bebé".</span></div>
+    <div class="def"><b>Valor singular</b><span>Cuánto pesa cada patrón. Grande es importante; cerca de 0 es ruido.</span></div>
+    <div class="def"><b>Embedding</b><span>La posición de un cliente o producto en esos patrones: una lista corta de números.</span></div>
+  </div>
+  <h3>Cómo se combinan</h3>
+  <div class="formula">R  =  U  ·  Σ  ·  Vᵀ
+(5×6) (5×k)(k×k)(k×6)
+
+U  → un embedding por cliente
+Σ  → peso de cada patrón
+V  → un embedding por producto</div>
+  <ol class="steps">
+    <li>El SVD descompone la matriz exacta en sus patrones, ordenados del más fuerte al más débil.</li>
+    <li>Te quedas solo con los k más fuertes (aquí k = 2) y tiras el resto.</li>
+    <li>Multiplicas de vuelta. La matriz reconstruida ya no es idéntica: los huecos se llenan con números que vienen de los patrones compartidos.</li>
+  </ol>
+  <p>Pesos de los patrones que encontró en nuestros datos:</p>
+  <div class="bars" id="bars"></div>
+  <p>Dos patrones explican casi todo, tal como lo vimos a ojo: desayuno y bebé.</p>
+  <div class="tbl" id="t-svd"></div>
+  <div class="verdict"><b>Qué le dice a Beto</b><p>Cereal 0.52 por encima de Leche 0.30, y Pañales en negativo. Rompe el empate y la información de Ana y Dani llega a Beto a través del patrón "desayuno", sin comparar par por par.</p></div>
+  <div class="fail"><b>Lo que no puede hacer</b><p>El SVD exige la matriz completa, así que trata los huecos de Beto como <b>0 = "no le gusta"</b>. Al intentar reproducir esos ceros, empuja hacia abajo justo lo que queremos recomendar. Mezcla "no sé" con "no". También es caro de recalcular con millones de filas.</p></div>
+  <p class="bridge">→ Necesitamos aprender los embeddings solo de lo que sí sabemos.</p>
+</section>
+
+<section id="funk">
+  <span class="eyebrow">Método 4 · premio Netflix, 2006</span>
+  <h2>SVD de Funk: aprender solo de lo conocido</h2>
+  <div class="intro">
+    <div><span>Qué hace</span><p>En lugar de descomponer la matriz con álgebra, inventa embeddings al azar y los va corrigiendo poco a poco (descenso de gradiente) para que el producto cliente × producto reproduzca las celdas que sí conocemos. Los huecos simplemente se ignoran durante el entrenamiento.</p></div>
+    <div class="mej"><span>Cómo mejora</span><p>Ya no castiga los huecos como si fueran rechazos: aprende solo de lo observado. Con calificaciones de 1 a 5 estrellas, como en Netflix, funcionó mucho mejor que el SVD clásico.</p></div>
+    <div class="lim"><span>Su limitación</span><p>Con compras solo existen "sí" (unos), nunca "no". Si aprende solo de unos, la salida más fácil es predecir 1 para todo y no distingue nada. Además el descenso de gradiente es lento: miles de pasitos pequeños.</p></div>
+  </div>
+  <p>Simon Funk lo publicó en un blog durante el concurso de Netflix. Se sigue llamando "SVD", pero ya no descompone nada: <b>busca</b> los embeddings con optimización, como cuando entrenas una regresión.</p>
+  <h3>Definiciones</h3>
+  <div class="defs">
+    <div class="def"><b>Función de pérdida</b><span>Un número que mide qué tan mal predices. Entrenar es hacerlo lo más pequeño posible.</span></div>
+    <div class="def"><b>Regularización λ</b><span>Castigo a los números muy grandes, para que el modelo no memorice.</span></div>
+    <div class="def"><b>Descenso de gradiente</b><span>Mover cada número un poquito en la dirección que baja la pérdida, y repetir miles de veces.</span></div>
+  </div>
+  <h3>Cómo se combinan</h3>
+  <div class="formula">pérdida = Σ (solo celdas conocidas) (r − x·y)²  +  λ(|x|² + |y|²)
+
+por cada celda conocida:
+  error = r − x·y
+  x ← x + paso × (error × y − λx)
+  y ← y + paso × (error × x − λy)</div>
+  <p>Aquí <b>x</b> es el embedding del cliente, <b>y</b> el del producto y <b>x·y</b> la predicción. Los huecos no aparecen en la suma, así que ya no los trata como "no".</p>
+  <div class="tbl" id="t-funk"></div>
+  <div class="verdict"><b>Qué le dice a Beto</b><p>Todo vale ≈ 0.97, Pañales incluido. No sirve.</p></div>
+  <div class="fail"><b>Lo que no puede hacer</b><p>Funk funcionaba con las estrellas de Netflix, donde hay 1, 3 o 5. Con compras, las únicas celdas conocidas son <b>unos</b>. Si solo aprendes de unos, la solución más fácil es predecir 1 en todas partes. Sin negativos, el modelo no aprende a distinguir.</p></div>
+  <p class="bridge">→ Necesitamos volver a usar los huecos, pero sin creerles del todo. Antes, un cambio en cómo se resuelve.</p>
+</section>
+
+<section id="als">
+  <span class="eyebrow">Método 5 · Alternating Least Squares</span>
+  <h2>ALS: el mismo objetivo, resuelto por turnos</h2>
+  <div class="intro">
+    <div><span>Qué hace</span><p>Busca exactamente lo mismo que Funk (embeddings que reproduzcan la matriz), pero lo resuelve por turnos: congela los productos y calcula a cada cliente con una regresión lineal exacta; luego congela los clientes y calcula los productos. Alterna hasta que los números dejan de cambiar.</p></div>
+    <div class="mej"><span>Cómo mejora</span><p>Velocidad y escala. Cada turno usa una fórmula cerrada en lugar de miles de pasitos, converge en pocas vueltas y cada cliente se calcula por separado, así que se reparte entre muchas máquinas (por eso viene en Spark).</p></div>
+    <div class="lim"><span>Su limitación</span><p>Solo cambia el cómo, no el qué. Con la misma pérdida de Funk llega a la misma respuesta inútil con datos de compras. El problema de no tener negativos sigue sin resolverse.</p></div>
+  </div>
+  <p>ALS no cambia <i>qué</i> se busca (la misma pérdida de Funk), sino <i>cómo</i> se busca.</p>
+  <h3>Definiciones</h3>
+  <div class="defs">
+    <div class="def"><b>Mínimos cuadrados</b><span>La regresión lineal de siempre. Tiene solución exacta con una fórmula, sin iterar.</span></div>
+    <div class="def"><b>Alternar</b><span>Congelar una mitad de las incógnitas, resolver la otra, y cambiar de turno.</span></div>
+  </div>
+  <h3>Cómo se combinan</h3>
+  <p>El truco: si congelas todos los embeddings de productos (Y), encontrar el embedding de Beto es una <b>regresión lineal</b>. Sus compras son la variable a explicar y los vectores de productos son las variables explicativas.</p>
+  <div class="formula">Turno A — congelo productos Y, resuelvo cada cliente:
+   x_cliente = (YᵀY + λI)⁻¹ · Yᵀ · r_cliente
+
+Turno B — congelo clientes X, resuelvo cada producto:
+   y_producto = (XᵀX + λI)⁻¹ · Xᵀ · r_producto
+
+Repetir A, B, A, B… hasta que no cambie</div>
+  <ol class="steps">
+    <li>Cada turno usa una fórmula exacta, no pasitos de gradiente. Converge en 10 a 20 vueltas.</li>
+    <li>Cada cliente se resuelve sin mirar a los demás, así que se reparte en muchas máquinas. Por eso Spark trae ALS de fábrica.</li>
+  </ol>
+  <div class="tbl" id="t-als"></div>
+  <div class="fail"><b>Lo que todavía no resuelve</b><p>Con la misma pérdida de Funk, llega a la misma respuesta inútil: para Beto todo da entre 0.93 y 0.95, Pañales incluido. ALS hace el cálculo rápido y escalable, pero el problema de los negativos sigue ahí.</p></div>
+  <p class="bridge">→ Falta la pieza final: cambiar la pérdida para datos de compras.</p>
+</section>
+
+<section id="implicit">
+  <span class="eyebrow">Método 6 · Hu, Koren y Volinsky, 2008</span>
+  <h2>ALS implicit: los huecos cuentan, pero poco</h2>
+  <div class="intro">
+    <div><span>Qué hace</span><p>Vuelve a usar toda la matriz, huecos incluidos, pero le pone a cada celda un nivel de confianza. Una compra repetida pesa mucho, un hueco pesa poco. Así interpreta un hueco como "probablemente no" y no como "seguro que no". Los embeddings se calculan con ALS, ahora ponderado por esa confianza.</p></div>
+    <div class="mej"><span>Cómo mejora</span><p>Junta lo mejor de lo anterior: los huecos aportan negativos (lo que le faltaba a Funk) sin tratarlos como rechazos seguros (el error del SVD), y aprovecha la frecuencia de compra como señal de intensidad. Mantiene la velocidad y escala de ALS.</p></div>
+    <div class="lim"><span>Su limitación</span><p>Solo conoce clientes y productos por sus IDs e historial. Un producto nuevo que nadie ha comprado, o un cliente nuevo, no tiene embedding (cold-start). Tampoco usa atributos (categoría, precio) ni el orden de las compras. Eso es lo que resuelven los métodos basados en contenido y luego las redes neuronales.</p></div>
+  </div>
+  <h3>Definiciones</h3>
+  <div class="defs">
+    <div class="def"><b>Feedback implícito</b><span>Señales que el cliente deja sin querer: compras, clics, vistas. No hay "no me gustó".</span></div>
+    <div class="def"><b>Preferencia p</b><span>1 si compró alguna vez, 0 si no. Se define para <i>todas</i> las celdas, huecos incluidos.</span></div>
+    <div class="def"><b>Confianza c</b><span>Cuánto le creemos a esa p. Comprar 5 veces da mucha confianza; un hueco, poca.</span></div>
+    <div class="def"><b>α (alfa)</b><span>Cuánto sube la confianza por cada compra repetida. Aquí α = 10.</span></div>
+  </div>
+  <h3>Cómo se combinan</h3>
+  <div class="formula">p = 1 si compró, 0 si no
+c = 1 + α × veces_que_compró
+
+pérdida = Σ (TODAS las celdas) c × (p − x·y)²  +  λ(|x|² + |y|²)</div>
+  <p>Ana compró Pan 5 veces, así que esa celda pesa c = 1 + 10×5 = <b>51</b>. Un hueco de Beto pesa c = <b>1</b>. El modelo se esfuerza muchísimo en acertar lo que se compró y apenas un poco en que los huecos den 0. Así hay negativos, pero débiles: "probablemente no", no "seguro que no".</p>
+  <p>Esta pérdida se resuelve con ALS: la misma regresión por turnos, ahora ponderada por c.</p>
+  <h3>Cómo baja la pérdida en cada vuelta</h3>
+  <div class="tbl" id="t-loss"></div>
+  <h3>Los embeddings que aprendió</h3>
+  <p>Cada cliente y producto quedó como un punto en 2 dimensiones. Un cliente "apunta" hacia los productos que le predice. Los productos se dibujan ampliados ×12 para que se vean en la misma escala.</p>
+  <div class="tbl" id="map"></div>
+  <p>La pantalla se partió sola en dos zonas: desayuno a la izquierda, bebé a la derecha. La Leche queda arriba al centro, porque la compran ambos grupos. Nadie le dijo al modelo que esas categorías existen.</p>
+  <div class="tbl" id="t-imp"></div>
+  <div class="verdict"><b>Qué le dice a Beto</b><p><b>1° Cereal (0.74), 2° Leche (0.31)</b>. Pañales y Toallitas en negativo. Coincide con la respuesta humana y además ordena: el Cereal es puro desayuno, mientras que la Leche es ambigua porque la compran todos. Apriori ya insinuaba esto con un lift Pan → Leche menor que 1.</p></div>
+</section>
+
+<section id="parte2">
+  <span class="eyebrow">Parte 2 · cuando el historial no alcanza</span>
+  <h2>Tres preguntas que ALS no puede responder</h2>
+  <p>ALS implicit conoce a cada cliente y producto solo por su ID y su historial. Para los cuatro métodos que siguen agregamos tres cosas al ejemplo:</p>
+  <ol class="steps">
+    <li><b>Un producto nuevo: Avena.</b> Llegó ayer, nadie la ha comprado. ¿A quién se la ofrecemos?</li>
+    <li><b>Un cliente nuevo: Fede.</b> Hizo una sola compra: Pañales. ¿Qué le sugerimos?</li>
+    <li><b>El carrito de ahora.</b> Beto está comprando en este momento y ya puso Pan y luego Cereal. ¿Qué agrega después?</li>
+  </ol>
+  <p>Para responder necesitamos describir los productos con <b>atributos</b>, que es información que no viene de las compras:</p>
+  <div class="tbl" id="t-attr"></div>
+  <p class="legend">Avena no tiene ninguna compra, pero sus atributos son los mismos que los del Pan y el Cereal.</p>
+</section>
+
+<section id="contenido">
+  <span class="eyebrow">Método 7 · basado en contenido</span>
+  <h2>Contenido: recomendar por cómo es el producto</h2>
+  <div class="intro">
+    <div><span>Qué hace</span><p>Describe cada producto con atributos (categoría, ingredientes, texto de la descripción). Arma un perfil del cliente promediando los atributos de lo que compró y le recomienda los productos cuyos atributos más se parecen a ese perfil, con la misma similitud coseno del vecindario. Ya no compara clientes con clientes, sino un cliente con productos.</p></div>
+    <div class="mej"><span>Cómo mejora</span><p>Resuelve el producto nuevo: la Avena se puede recomendar desde el primer día porque tiene atributos, aunque nadie la haya comprado. Tampoco depende de que existan otros clientes parecidos, y es fácil de explicar ("te la sugerimos porque compras desayuno con granos").</p></div>
+    <div class="lim"><span>Su limitación</span><p>Solo recomienda más de lo mismo: nunca descubre que al grupo de desayuno también le gusta algo de otra categoría. No aprende de los demás clientes. Depende de que alguien etiquete bien los productos, y si dos productos tienen los mismos atributos (Pan, Cereal, Avena) no los distingue.</p></div>
+  </div>
+  <h3>Definiciones</h3>
+  <div class="defs">
+    <div class="def"><b>Vector de atributos</b><span>Un producto descrito como lista de 0 y 1 según sus características. Avena = [1, 0, 1, 0, 0].</span></div>
+    <div class="def"><b>Perfil del cliente</b><span>El promedio de los vectores de atributos de lo que compró. Resume "qué tipo de cosas le gustan".</span></div>
+    <div class="def"><b>Similitud coseno</b><span>La misma del método 2, pero ahora entre el perfil del cliente y cada producto.</span></div>
+    <div class="def"><b>TF-IDF / embeddings de texto</b><span>Formas de convertir la descripción escrita de un producto en un vector de atributos automáticamente.</span></div>
+  </div>
+  <h3>Cómo se combinan</h3>
+  <div class="formula">perfil(Beto) = promedio(atributos de Pan, atributos de Mantequilla)
+             = ([1,0,1,0,0] + [1,1,0,0,0]) / 2
+             = [1, 0.5, 0.5, 0, 0]
+
+puntaje(Beto, producto) = coseno(perfil(Beto), atributos(producto))</div>
+  <div class="tbl" id="t-cb"></div>
+  <div class="verdict"><b>Qué le dice a Beto</b><p><b>Cereal y Avena empatados (0.87)</b>, luego Leche (0.71). La Avena entra sin una sola venta. A Fede, que solo compró Pañales, le sugiere Toallitas (1.0) y algo de Leche (0.41).</p></div>
+  <div class="fail"><b>Lo que no puede hacer</b><p>No sabe que Cereal y Avena son distintos para los clientes, porque sus etiquetas son iguales. Tampoco sabe que el grupo de bebé compra mucha leche, porque eso está en el comportamiento de los clientes y no en las etiquetas. El colaborativo veía el comportamiento pero no los atributos; el contenido ve los atributos pero no el comportamiento.</p></div>
+  <p class="bridge">→ Necesitamos un modelo que aprenda de las compras de todos y además use atributos.</p>
+</section>
+
+<section id="twotower">
+  <span class="eyebrow">Método 8 · redes neuronales · YouTube / Google, 2016–2019</span>
+  <h2>Two-Tower: ALS con atributos, hecho con redes</h2>
+  <div class="intro">
+    <div><span>Qué hace</span><p>Usa dos redes neuronales separadas, las "torres". La torre del cliente recibe su historial y sus datos y produce un embedding. La torre del producto recibe su ID y sus atributos y produce otro embedding. La probabilidad de compra es el producto punto de ambos, igual que en ALS. Las dos torres se entrenan juntas con las compras de todos los clientes.</p></div>
+    <div class="mej"><span>Cómo mejora</span><p>Junta colaborativo y contenido en un solo modelo. Aprende patrones de comportamiento como ALS, pero como sus entradas son atributos e historial y no solo IDs, puede calcular un embedding para la Avena (sin ventas) y para Fede (cliente nuevo). Además las torres son independientes: los vectores de todos los productos se precalculan y se buscan los más cercanos en milisegundos entre millones.</p></div>
+    <div class="lim"><span>Su limitación</span><p>Ve al cliente como una bolsa de compras sin orden. No distingue si Beto acaba de poner Cereal en el carrito o lo compró hace un mes, así que no reacciona a lo que está haciendo ahora. Además necesita muchos más datos que ALS para no memorizar.</p></div>
+  </div>
+  <h3>Definiciones</h3>
+  <div class="defs">
+    <div class="def"><b>Neurona / capa</b><span>Una capa multiplica la entrada por una matriz de pesos y aplica una función simple. Varias capas seguidas pueden aprender relaciones no lineales.</span></div>
+    <div class="def"><b>ReLU</b><span>La función más usada entre capas: deja pasar los positivos y convierte los negativos en 0.</span></div>
+    <div class="def"><b>Torre</b><span>Una red pequeña que convierte un tipo de objeto (cliente o producto) en un embedding.</span></div>
+    <div class="def"><b>Sigmoide σ</b><span>Convierte cualquier número en una probabilidad entre 0 y 1.</span></div>
+    <div class="def"><b>Entropía cruzada</b><span>La pérdida para "¿compró sí o no?". Castiga mucho predecir 0.9 cuando la respuesta era 0.</span></div>
+  </div>
+  <h3>Cómo se combinan</h3>
+  <div class="tbl" id="tt-diagram"></div>
+  <div class="formula">u = TorreCliente( perfil de atributos, productos comprados )
+v = TorreProducto( ID del producto, atributos )
+
+P(compra) = σ(u · v)
+
+Torre = entrada → capa(16 neuronas, ReLU) → embedding de 3 números</div>
+  <ol class="steps">
+    <li>Con 5 clientes una red solo memoriza. Por eso entrenamos con <b>200 clientes simulados</b> que siguen los mismos dos patrones (120 de desayuno, 80 de bebé), más nuestros 5.</li>
+    <li>En cada vuelta le escondemos a la torre del cliente la mitad de su historial y le pedimos adivinar el historial completo. Así aprende a recomendar a clientes con poca historia, como Beto y Fede.</li>
+    <li>La Avena no tiene ID entrenado, así que su embedding sale solo de sus atributos.</li>
+  </ol>
+  <div class="tbl" id="t-ttloss"></div>
+  <div class="tbl" id="t-tt"></div>
+  <div class="verdict"><b>Qué le dice a Beto</b><p><b>Avena 0.84, Cereal 0.69, Leche 0.60</b>. Pañales 0.02. Y a Fede, con una sola compra, le dice <b>Toallitas 0.89 y Leche 0.63</b>. La Leche para Fede no salía por contenido (0.41) con tanta fuerza: aquí aparece porque el modelo aprendió de otros clientes que el grupo de bebé compra leche.</p></div>
+  <div class="fail"><b>Lo que no puede hacer</b><p>Beto ya tiene Cereal en el carrito ahora mismo, y el modelo le sigue sugiriendo Cereal y Avena. No sabe qué pasó primero ni qué está pasando en esta sesión.</p></div>
+  <p class="bridge">→ Necesitamos leer las compras en orden, como una frase.</p>
+</section>
+
+<section id="gru">
+  <span class="eyebrow">Método 9 · Hidasi y otros, 2016</span>
+  <h2>GRU4Rec: leer el carrito en orden</h2>
+  <div class="intro">
+    <div><span>Qué hace</span><p>Lee los productos del carrito uno por uno, en el orden en que se agregaron. Lleva una "memoria" (el estado oculto) que actualiza con cada producto nuevo, y en cada paso usa esa memoria para predecir cuál será el siguiente producto. Es la misma idea que un teclado de celular que predice la siguiente palabra.</p></div>
+    <div class="mej"><span>Cómo mejora</span><p>Usa el orden y el momento. Responde "¿qué agregará ahora?" en lugar de "¿qué le gusta en general?". Funciona sin saber quién es el cliente, solo con la sesión actual, lo que sirve para visitantes anónimos. Y entiende contexto: el mismo último producto puede llevar a predicciones distintas según lo que vino antes.</p></div>
+    <div class="lim"><span>Su limitación</span><p>Toda la sesión se comprime en un solo vector que se reescribe en cada paso, así que en carritos largos lo del principio se va diluyendo. Se entrena paso por paso (no se puede paralelizar dentro de una secuencia), lo que lo hace lento. Y no se puede ver qué producto pesó en la decisión.</p></div>
+  </div>
+  <h3>Definiciones</h3>
+  <div class="defs">
+    <div class="def"><b>Sesión</b><span>Una visita o carrito: la lista ordenada de productos agregados.</span></div>
+    <div class="def"><b>Estado oculto h</b><span>Un vector que funciona como memoria de lo que pasó hasta ahora en la sesión.</span></div>
+    <div class="def"><b>Red recurrente</b><span>Una red que se aplica una vez por paso y se pasa a sí misma la memoria del paso anterior.</span></div>
+    <div class="def"><b>Compuertas (GRU)</b><span>Dos controles aprendidos: cuánto actualizar la memoria (z) y cuánto olvidar de ella (r).</span></div>
+    <div class="def"><b>Softmax</b><span>Convierte un puntaje por producto en probabilidades que suman 1: "¿cuál es el siguiente?".</span></div>
+  </div>
+  <h3>Cómo se combinan</h3>
+  <div class="formula">para cada producto del carrito, en orden:
+   x = embedding(producto)
+   z = σ(x·Wz + h·Uz)            ← cuánto actualizar
+   r = σ(x·Wr + h·Ur)            ← cuánto olvidar
+   h̃ = tanh(x·Wh + (r × h)·Uh)  ← memoria candidata
+   h = (1 − z) × h  +  z × h̃      ← memoria nueva
+
+P(siguiente producto) = softmax(h · Wo)</div>
+  <ol class="steps">
+    <li>Entrenamos con <b>600 carritos simulados</b> con patrones de compra en orden: "Pan → Mantequilla → Cereal → Leche", "Pan → Leche → Cereal", "Pañales → Leche → Toallitas", más un 30% de ruido.</li>
+    <li>Le preguntamos el siguiente producto para tres carritos. Fíjate en los dos últimos: terminan en el mismo producto.</li>
+  </ol>
+  <div class="tbl" id="t-gru"></div>
+  <div class="verdict"><b>Qué le dice a Beto</b><p>Con su carrito Pan → Cereal: <b>Leche (0.79)</b>. Es lo que ningún método anterior respondía, porque todos le seguían ofreciendo Cereal. Y con dos carritos que terminan en Leche, recuerda lo anterior: después de Pan sugiere Cereal (0.86); después de Pañales sugiere Toallitas (0.88).</p></div>
+  <div class="fail"><b>Lo que no puede hacer</b><p>En estos carritos de 2 productos acierta. Con carritos de 30 productos, para recordar el primero tiene que cargarlo a través de 29 reescrituras de memoria. Y no hay forma de preguntarle por qué decidió algo.</p></div>
+  <p class="bridge">→ Necesitamos que el modelo pueda mirar directamente cualquier producto anterior, sin pasar por la memoria.</p>
+</section>
+
+<section id="sasrec">
+  <span class="eyebrow">Método 10 · Kang y McAuley, 2018</span>
+  <h2>SASRec: mirar directo a lo que importa</h2>
+  <div class="intro">
+    <div><span>Qué hace</span><p>Resuelve la misma tarea que GRU4Rec (predecir el siguiente producto del carrito), pero con atención, el mecanismo de los Transformers como GPT. En lugar de una memoria que pasa de mano en mano, en cada posición el modelo mira todos los productos anteriores a la vez, decide cuánto peso le da a cada uno y mezcla sus embeddings según esos pesos.</p></div>
+    <div class="mej"><span>Cómo mejora</span><p>Puede conectar el producto 30 con el 1 directamente, sin que se diluya. Todas las posiciones se calculan en paralelo, así que se entrena mucho más rápido. Y los pesos de atención se pueden leer: muestran qué producto anterior explicó la recomendación. En los estudios publicados suele superar a GRU4Rec.</p></div>
+    <div class="lim"><span>Su limitación</span><p>Necesita muchos datos. Solo ve una ventana de los últimos N productos y su costo crece con el cuadrado de ese largo. En su versión básica usa solo IDs, sin atributos, así que tampoco resuelve productos nuevos. En la práctica se combina con lo anterior.</p></div>
+  </div>
+  <h3>Definiciones</h3>
+  <div class="defs">
+    <div class="def"><b>Atención</b><span>Un promedio ponderado de los productos anteriores, donde los pesos los decide el propio modelo según el contexto.</span></div>
+    <div class="def"><b>Query, key, value</b><span>Cada producto se transforma en tres vectores: lo que busca (q), cómo se anuncia (k) y lo que aporta (v).</span></div>
+    <div class="def"><b>Peso de atención</b><span>softmax(q·k): qué fracción de la decisión sale de cada producto anterior. Suman 100%.</span></div>
+    <div class="def"><b>Máscara causal</b><span>Prohíbe mirar productos futuros: en el paso 2 solo se ven el 1 y el 2.</span></div>
+    <div class="def"><b>Embedding de posición</b><span>Un vector que dice "soy el 1.º, el 2.º…", porque la atención por sí sola no conoce el orden.</span></div>
+  </div>
+  <h3>Cómo se combinan</h3>
+  <div class="formula">x_i = embedding(producto_i) + embedding(posición_i)
+q, k, v = x · Wq,  x · Wk,  x · Wv
+
+pesos  = softmax( q_último · k_j / √d )   para cada j anterior
+h      = Σ pesos_j × v_j                  ← mezcla de lo anterior
+h      = h + capa(h)                      ← un ajuste no lineal
+
+P(siguiente producto) = softmax( h · embeddingsᵀ )</div>
+  <p>Mismo entrenamiento que GRU4Rec: los mismos 600 carritos.</p>
+  <div class="tbl" id="t-sas"></div>
+  <h3>A quién miró para decidir</h3>
+  <div id="att"></div>
+  <div class="verdict"><b>Qué le dice a Beto</b><p><b>Leche (0.77)</b>, casi la misma respuesta que GRU4Rec. La diferencia es que podemos mirar dentro. En el carrito Pan → Leche, el 67% de la atención va al Pan, y por eso dice Cereal y no Pañales. En Pañales → Leche la atención se reparte (44% Pañales, 56% Leche) y aun así acierta Toallitas (0.88), porque la información también pasa por otras partes de la red. La atención es una pista útil de qué miró el modelo, no una explicación completa.</p></div>
+  <div class="fail"><b>Lo que queda abierto</b><p>No conoce la Avena ni a Fede (solo IDs), no usa atributos y no sabe nada de Beto fuera de este carrito. Por eso un sistema real combina varias piezas: ALS o Two-Tower para elegir unos cientos de candidatos según quién eres, y un modelo de secuencia o de ranking para ordenarlos según lo que estás haciendo ahora.</p></div>
+</section>
+
+<section id="resumen">
+  <span class="eyebrow">Todo junto</span>
+  <h2>Cada método le contestó distinto a Beto</h2>
+  <div class="tbl" id="t-resumen"></div>
+  <div class="tbl" id="t-hilo"></div>
+  <p>Los métodos 1 a 6 responden "¿qué le gusta a Beto?". El 7 y el 8 agregan "¿y lo nuevo?". El 9 y el 10 responden "¿qué hará ahora?". Un sistema real de supermercado usa varios a la vez: uno para elegir candidatos y otro para ordenarlos en el momento.</p>
+</section>
+</main>
+
+<script>
+const C=["Ana","Beto","Caro","Dani","Eva"];
+const P=["Pan","Mantequilla","Leche","Cereal","Pañales","Toallitas"];
+const cnt=[[5,3,4,2,0,0],[4,2,0,0,0,0],[0,0,3,0,6,4],[2,0,3,3,0,0],[0,0,1,0,2,3]];
+const bin=cnt.map(r=>r.map(v=>v>0?1:0));
+const shade=(v,max)=>{if(v<=0)return v<0?`background:color-mix(in srgb,var(--warn) ${Math.min(60,Math.round(-v/max*60))}%,transparent)`:"";return `background:color-mix(in srgb,var(--accent) ${Math.round(Math.min(1,v/max)*55)}%,transparent)`};
+function mat(id,data,{fmt=v=>v,max=1,holes=false,rows=C,cols=P,corner=""}={}){
+  let h=`<table><thead><tr><th class="name">${corner}</th>${cols.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>`;
+  data.forEach((r,i)=>{h+=`<tr class="${rows[i]==="Beto"?"beto":""}"><td class="name">${rows[i]}</td>`+r.map((v,j)=>{
+    const hole=holes&&rows[i]==="Beto"&&bin[1][j]===0;
+    return `<td class="${hole?"hole":""}" style="${shade(v,max)}">${fmt(v)}</td>`}).join("")+"</tr>"});
+  document.getElementById(id).innerHTML=h+"</tbody></table>";
+}
+const f2=v=>v.toFixed(2);
+mat("t-conteo",cnt,{max:6,corner:"Compras"});
+mat("t-bin",bin,{holes:true,corner:"¿Compró?"});
+
+// Apriori
+document.getElementById("t-reglas").innerHTML=`<table><thead><tr><th class="name">Regla</th><th>Soporte</th><th>Confianza</th><th>Lift</th></tr></thead><tbody>`+
+[["Pañales → Toallitas",.4,1,2.5],["Pan → Mantequilla",.4,.67,1.67],["Pan → Cereal",.4,.67,1.67],["Cereal → Leche",.4,1,1.25],["Pan → Leche",.4,.67,.83]]
+.map(r=>`<tr class="${r[0].startsWith("Pan")?"beto":""}"><td class="name">${r[0]}</td><td>${r[1].toFixed(2)}</td><td>${r[2].toFixed(2)}</td><td style="${shade(r[3]-1,1.5)}">${r[3].toFixed(2)}</td></tr>`).join("")+"</tbody></table>";
+
+// Vecindario
+const sim=[0.71,1,0,0.41,0];
+document.getElementById("t-sim").innerHTML=`<table><thead><tr><th class="name">Similitud con Beto</th>${C.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody><tr><td class="name">coseno</td>${sim.map((v,i)=>i===1?`<td>—</td>`:`<td style="${shade(v,1)}">${v.toFixed(2)}</td>`).join("")}</tr></tbody></table>`;
+mat("t-vec",[[1,0.63,1,1,0,0]],{rows:["Beto"],fmt:f2,holes:true,corner:"Puntaje"});
+
+// SVD
+const sv=[2.95,2.20,1.12,0.44,0.00];
+document.getElementById("bars").innerHTML=sv.map((v,i)=>`<div class="bar"><span>Patrón ${i+1}</span><div class="${i<2?"":"dim"}" style="width:${Math.max(2,v/2.95*100)}%"></div><span>${v.toFixed(2)}</span></div>`).join("");
+mat("t-svd",[[1.22,0.82,0.95,0.92,0.03,0.03],[0.72,0.50,0.30,0.52,-0.21,-0.21],[-0.03,-0.09,1.05,0.08,0.97,0.97],[0.93,0.62,0.84,0.71,0.13,0.13],[-0.03,-0.09,1.05,0.08,0.97,0.97]],{fmt:f2,holes:true,corner:"Reconstruida k=2"});
+
+// Funk
+mat("t-funk",[[.98,.98,.98,.98,.97,.97],[.98,.98,.98,.98,.96,.96],[.97,.96,.98,.97,.98,.98],[.98,.98,.98,.98,.97,.97],[.97,.96,.98,.97,.98,.98]],{fmt:f2,holes:true,corner:"Funk"});
+
+mat("t-als",[[.95,.94,.95,.93,.93,.93]],{rows:["Beto"],fmt:f2,holes:true,corner:"ALS explícito"});
+// ALS implicit
+document.getElementById("t-loss").innerHTML=`<table><thead><tr><th class="name">Vuelta</th><th>1</th><th>2</th><th>3</th><th>5</th><th>15</th></tr></thead><tbody><tr><td class="name">Pérdida</td>${[60.6,41.8,33.3,24.3,12.3].map(v=>`<td>${v.toFixed(1)}</td>`).join("")}</tr></tbody></table>`;
+mat("t-imp",[[1.03,.99,.99,1.01,.16,.16],[.98,.97,.31,.74,-.41,-.41],[-.18,-.21,1.01,.23,1,1],[.97,.93,1,.97,.2,.21],[-.18,-.21,.99,.23,.99,.99]],{fmt:f2,holes:true,corner:"ALS implicit"});
+
+// Mapa de embeddings
+(function(){
+  const W=560,H=360,pad=40,xmin=-3.8,xmax=3.8,ymin=0,ymax=5.6;
+  const sx=x=>pad+(x-xmin)/(xmax-xmin)*(W-2*pad), sy=y=>H-pad-(y-ymin)/(ymax-ymin)*(H-2*pad);
+  const users=[["Ana",-1.62,5.02],["Beto",-3.03,3.18],["Dani",-1.38,4.88],["Caro / Eva",2.97,2.08]];
+  const prods=[["Pan / Mantequilla",-2.04,1.75],["Cereal",-0.6,2.16],["Leche",1.92,3.0],["Pañales / Toallitas",3.06,1.32]];
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" style="max-width:100%;height:auto" role="img" aria-label="Embeddings de clientes y productos en dos dimensiones">`;
+  s+=`<line x1="${sx(0)}" y1="${pad-10}" x2="${sx(0)}" y2="${H-pad}" stroke="var(--line)" stroke-dasharray="4 4"/>`;
+  s+=`<line x1="${pad}" y1="${H-pad}" x2="${W-pad}" y2="${H-pad}" stroke="var(--line)"/>`;
+  s+=`<text x="${sx(-2.2)}" y="${H-12}" font-size="12" text-anchor="middle" fill="var(--muted)" style="fill:var(--muted)">← zona desayuno</text>`;
+  s+=`<text x="${sx(2.2)}" y="${H-12}" font-size="12" text-anchor="middle" style="fill:var(--muted)">zona bebé →</text>`;
+  s+=`<line x1="${sx(0)}" y1="${sy(0)}" x2="${sx(-3.03)}" y2="${sy(3.18)}" stroke="var(--mark)" stroke-width="3"/>`;
+  prods.forEach(([n,x,y])=>{s+=`<rect x="${sx(x)-6}" y="${sy(y)-6}" width="12" height="12" fill="var(--warn)" transform="rotate(45 ${sx(x)} ${sy(y)})"/><text x="${sx(x)}" y="${sy(y)+22}" font-size="12" text-anchor="middle">${n}</text>`});
+  users.forEach(([n,x,y])=>{const b=n==="Beto";s+=`<circle cx="${sx(x)}" cy="${sy(y)}" r="${b?8:6}" fill="${b?"var(--fg)":"var(--accent)"}"/><text x="${sx(x)+(n==="Dani"?12:n==="Ana"?-12:0)}" y="${sy(y)-12}" font-size="13" font-weight="600" text-anchor="${n==="Dani"?"start":n==="Ana"?"end":"middle"}">${n}</text>`});
+  s+=`</svg><p class="legend">● clientes &nbsp; ◆ productos &nbsp; La línea amarilla es la dirección de Beto: apunta hacia el desayuno.</p>`;
+  document.getElementById("map").innerHTML=s;
+})();
+
+// Resumen
+const res=[["Apriori","Cereal","—","Igual para todos los que llevan pan"],["Vecindario","Leche = Cereal (1.0)","0","Empates, similitudes en 0, lento"],["SVD","Cereal 0.52 > Leche 0.30","−0.21","Huecos = 'no le gusta'"],["Funk","Todo ≈ 0.97","0.96","Sin negativos, colapsa"],["ALS","Todo ≈ 0.94","0.93","Solo cambia cómo se calcula"],["ALS implicit","Cereal 0.74 > Leche 0.31","−0.41","No conoce lo nuevo"],["Contenido","Cereal = Avena (0.87) > Leche 0.71","0","Solo más de lo mismo"],["Two-Tower","Avena 0.84 > Cereal 0.69 > Leche 0.60","0.02","No ve el orden ni el momento"],["GRU4Rec","Ahora: Leche 0.79","0.01","Memoria que se diluye, lento"],["SASRec","Ahora: Leche 0.77 (con pesos de atención)","0.01","Mucho dato, solo IDs"]];
+document.getElementById("t-resumen").innerHTML=`<table><thead><tr><th class="name">Método</th><th>Le recomienda</th><th>Pañales</th><th>Falla que deja</th></tr></thead><tbody>`+res.map((r,i)=>`<tr class="${i===5||i===9?"beto":""}"><td class="name">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td style="font-family:var(--body);text-align:left">${r[3]}</td></tr>`).join("")+"</tbody></table>";
+const hilo=[["Apriori","Cuenta combinaciones","No personaliza"],["Vecindario","Personaliza con la historia de cada cliente","Datos escasos y costo al cuadrado"],["SVD","Comprime en patrones: nacen los embeddings","Confunde 'no sé' con 'no'"],["Funk","Aprende solo de lo conocido","Sin negativos no distingue"],["ALS","Solución exacta por turnos, paralelizable","Mismo objetivo que Funk"],["ALS implicit","Huecos como 'no' débil, compras con confianza","Productos y clientes nuevos (cold-start)"],["Contenido","Recomienda lo nuevo por sus atributos","No aprende del comportamiento de otros"],["Two-Tower","Comportamiento + atributos en una red; resuelve lo nuevo","Ignora el orden y el momento"],["GRU4Rec","Lee el carrito en orden: predice lo siguiente","Memoria que se diluye; lento de entrenar"],["SASRec","Atención directa a cualquier paso; pesos inspeccionables","Necesita mucho dato; solo IDs"]];
+document.getElementById("t-hilo").innerHTML=`<table><thead><tr><th class="name">Método</th><th style="text-align:left">Lo que aporta</th><th style="text-align:left">Lo que hereda el siguiente</th></tr></thead><tbody>`+hilo.map(r=>`<tr><td class="name">${r[0]}</td><td style="font-family:var(--body);text-align:left">${r[1]}</td><td style="font-family:var(--body);text-align:left">${r[2]}</td></tr>`).join("")+"</tbody></table>";
+// ---------- Parte 2 ----------
+const P7=["Pan","Mantequilla","Leche","Cereal","Pañales","Toallitas","Avena"];
+const FT=["Desayuno","Lácteo","Granos","Bebé","Higiene"];
+const ATT=[[1,0,1,0,0],[1,1,0,0,0],[1,1,0,1,0],[1,0,1,0,0],[0,0,0,1,1],[0,0,0,1,1],[1,0,1,0,0]];
+mat("t-attr",ATT,{rows:P7,cols:FT,corner:"Producto"});
+document.querySelector("#t-attr tbody").lastElementChild.classList.add("beto");
+function mat7(id,data,rows,corner){mat(id,data,{rows,cols:P7,fmt:f2,corner});
+  document.querySelectorAll(`#${id} tbody tr`).forEach((tr,i)=>{if(rows[i]==="Beto"){[...tr.children].slice(1).forEach((td,j)=>{if(j>=2&&j!==6||j===6)td.classList.toggle("hole",[2,3,4,5,6].includes(j))})}})}
+mat7("t-cb",[[.87,.87,.71,.87,0,0,.87],[0,0,.41,0,1,1,0]],["Beto","Fede"],"Coseno");
+mat7("t-tt",[[.93,.99,.60,.69,.02,.03,.84],[.09,.11,.63,.19,.91,.89,.16]],["Beto","Fede"],"P(compra)");
+document.getElementById("t-ttloss").innerHTML=`<table><thead><tr><th class="name">Vuelta</th><th>1</th><th>100</th><th>500</th><th>2000</th></tr></thead><tbody><tr><td class="name">Pérdida</td>${[.711,.421,.413,.401].map(v=>`<td>${v.toFixed(3)}</td>`).join("")}</tr></tbody></table>`;
+(function(){
+  const box=(x,y,w,h,t,sub,fill)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="${fill}" stroke="var(--line)"/><text x="${x+w/2}" y="${y+h/2-(sub?4:-4)}" font-size="13" font-weight="600" text-anchor="middle">${t}</text>${sub?`<text x="${x+w/2}" y="${y+h/2+13}" font-size="11" text-anchor="middle" style="fill:var(--muted)">${sub}</text>`:""}`;
+  const ar=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#ah)"/>`;
+  let s=`<svg viewBox="0 0 560 330" width="560" style="max-width:100%;height:auto" role="img" aria-label="Diagrama de dos torres"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>`;
+  s+=box(30,270,200,48,"Cliente","historial + perfil","var(--surface)")+box(330,270,200,48,"Producto","ID + atributos","var(--surface)");
+  s+=box(30,180,200,48,"Capa 16 · ReLU","","var(--accent-soft)")+box(330,180,200,48,"Capa 16 · ReLU","","var(--accent-soft)");
+  s+=box(55,100,150,44,"u (3 números)","","var(--surface)")+box(355,100,150,44,"v (3 números)","","var(--surface)");
+  s+=box(205,14,150,48,"σ(u · v)","probabilidad de compra","var(--mark)");
+  s+=ar(130,270,130,230)+ar(430,270,430,230)+ar(130,180,130,146)+ar(430,180,430,146)+ar(150,100,240,64)+ar(410,100,320,64);
+  s+=`<text x="140" y="166" font-size="11" text-anchor="start" style="fill:var(--muted)">torre del cliente</text><text x="440" y="166" font-size="11" text-anchor="start" style="fill:var(--muted)">torre del producto</text></svg>`;
+  document.getElementById("tt-diagram").innerHTML=s;
+})();
+const P6=["Pan","Mantequilla","Leche","Cereal","Pañales","Toallitas"];
+const carts=[["Beto: Pan → Cereal",[.04,.02,.79,.13,.01,.02],[.04,.02,.77,.14,.01,.02],[["Pan",.55],["Cereal",.45]]],
+             ["Pan → Leche",[.06,.01,.04,.86,.02,0],[.06,.02,.04,.86,.02,0],[["Pan",.67],["Leche",.33]]],
+             ["Pañales → Leche",[.02,.01,.06,.01,.02,.88],[.02,.01,.06,.01,.02,.88],[["Pañales",.44],["Leche",.56]]]];
+mat("t-gru",carts.map(c=>c[1]),{rows:carts.map(c=>c[0]),cols:P6,fmt:f2,corner:"Carrito → siguiente"});
+mat("t-sas",carts.map(c=>c[2]),{rows:carts.map(c=>c[0]),cols:P6,fmt:f2,corner:"Carrito → siguiente"});
+document.getElementById("att").innerHTML=carts.map(c=>`<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px"><b style="font-family:var(--display)">${c[0]}</b><div class="bars">${c[3].map(([n,w])=>`<div class="bar"><span>${n}</span><div style="width:${w*100}%"></div><span>${Math.round(w*100)}%</span></div>`).join("")}</div></div>`).join("");
+
+</script>
+
+</body>
+</html>

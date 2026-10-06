@@ -1,0 +1,510 @@
+{
+ "1_apriori": [
+  {
+   "regla": "Pañales → Toallitas",
+   "soporte": 0.4,
+   "confianza": 1.0,
+   "lift": 2.5
+  },
+  {
+   "regla": "Toallitas → Pañales",
+   "soporte": 0.4,
+   "confianza": 1.0,
+   "lift": 2.5
+  },
+  {
+   "regla": "Pan → Mantequilla",
+   "soporte": 0.4,
+   "confianza": 0.67,
+   "lift": 1.67
+  },
+  {
+   "regla": "Pan → Cereal",
+   "soporte": 0.4,
+   "confianza": 0.67,
+   "lift": 1.67
+  },
+  {
+   "regla": "Mantequilla → Pan",
+   "soporte": 0.4,
+   "confianza": 1.0,
+   "lift": 1.67
+  },
+  {
+   "regla": "Cereal → Pan",
+   "soporte": 0.4,
+   "confianza": 1.0,
+   "lift": 1.67
+  },
+  {
+   "regla": "Leche → Cereal",
+   "soporte": 0.4,
+   "confianza": 0.5,
+   "lift": 1.25
+  },
+  {
+   "regla": "Leche → Pañales",
+   "soporte": 0.4,
+   "confianza": 0.5,
+   "lift": 1.25
+  },
+  {
+   "regla": "Leche → Toallitas",
+   "soporte": 0.4,
+   "confianza": 0.5,
+   "lift": 1.25
+  },
+  {
+   "regla": "Cereal → Leche",
+   "soporte": 0.4,
+   "confianza": 1.0,
+   "lift": 1.25
+  },
+  {
+   "regla": "Pañales → Leche",
+   "soporte": 0.4,
+   "confianza": 1.0,
+   "lift": 1.25
+  },
+  {
+   "regla": "Toallitas → Leche",
+   "soporte": 0.4,
+   "confianza": 1.0,
+   "lift": 1.25
+  },
+  {
+   "regla": "Pan → Leche",
+   "soporte": 0.4,
+   "confianza": 0.67,
+   "lift": 0.83
+  },
+  {
+   "regla": "Leche → Pan",
+   "soporte": 0.4,
+   "confianza": 0.5,
+   "lift": 0.83
+  }
+ ],
+ "2_vecindario": {
+  "similitud": {
+   "Ana": 0.71,
+   "Beto": 1.0,
+   "Caro": 0.0,
+   "Dani": 0.41,
+   "Eva": 0.0
+  },
+  "puntaje": {
+   "Pan": 1.0,
+   "Mantequilla": 0.63,
+   "Leche": 1.0,
+   "Cereal": 1.0,
+   "Pañales": 0.0,
+   "Toallitas": 0.0
+  }
+ },
+ "3_svd": {
+  "valores_singulares": [
+   2.95,
+   2.2,
+   1.12,
+   0.44,
+   0.0
+  ],
+  "reconstruida": [
+   [
+    1.22,
+    0.82,
+    0.95,
+    0.92,
+    0.03,
+    0.03
+   ],
+   [
+    0.72,
+    0.5,
+    0.3,
+    0.52,
+    -0.21,
+    -0.21
+   ],
+   [
+    -0.03,
+    -0.09,
+    1.05,
+    0.08,
+    0.97,
+    0.97
+   ],
+   [
+    0.93,
+    0.62,
+    0.84,
+    0.71,
+    0.13,
+    0.13
+   ],
+   [
+    -0.03,
+    -0.09,
+    1.05,
+    0.08,
+    0.97,
+    0.97
+   ]
+  ],
+  "beto": {
+   "Pan": 0.72,
+   "Mantequilla": 0.5,
+   "Leche": 0.3,
+   "Cereal": 0.52,
+   "Pañales": -0.21,
+   "Toallitas": -0.21
+  }
+ },
+ "4_funk": {
+  "reconstruida": [
+   [
+    0.98,
+    0.98,
+    0.98,
+    0.98,
+    0.97,
+    0.97
+   ],
+   [
+    0.98,
+    0.98,
+    0.98,
+    0.98,
+    0.96,
+    0.96
+   ],
+   [
+    0.97,
+    0.96,
+    0.98,
+    0.97,
+    0.98,
+    0.98
+   ],
+   [
+    0.98,
+    0.98,
+    0.98,
+    0.98,
+    0.97,
+    0.97
+   ],
+   [
+    0.97,
+    0.96,
+    0.98,
+    0.97,
+    0.98,
+    0.98
+   ]
+  ],
+  "beto": {
+   "Pan": 0.98,
+   "Mantequilla": 0.98,
+   "Leche": 0.98,
+   "Cereal": 0.98,
+   "Pañales": 0.96,
+   "Toallitas": 0.96
+  }
+ },
+ "5_als": {
+  "reconstruida": [
+   [
+    0.98,
+    0.97,
+    0.98,
+    0.96,
+    0.95,
+    0.95
+   ],
+   [
+    0.95,
+    0.94,
+    0.95,
+    0.93,
+    0.93,
+    0.93
+   ],
+   [
+    0.98,
+    0.96,
+    0.98,
+    0.96,
+    0.96,
+    0.96
+   ],
+   [
+    0.97,
+    0.96,
+    0.97,
+    0.95,
+    0.94,
+    0.94
+   ],
+   [
+    0.98,
+    0.96,
+    0.98,
+    0.96,
+    0.96,
+    0.96
+   ]
+  ],
+  "beto": {
+   "Pan": 0.95,
+   "Mantequilla": 0.94,
+   "Leche": 0.95,
+   "Cereal": 0.93,
+   "Pañales": 0.93,
+   "Toallitas": 0.93
+  }
+ },
+ "6_als_implicit": {
+  "reconstruida": [
+   [
+    1.03,
+    0.99,
+    0.99,
+    1.01,
+    0.16,
+    0.16
+   ],
+   [
+    0.98,
+    0.97,
+    0.31,
+    0.74,
+    -0.41,
+    -0.41
+   ],
+   [
+    -0.18,
+    -0.21,
+    1.01,
+    0.23,
+    1.0,
+    1.0
+   ],
+   [
+    0.97,
+    0.93,
+    1.0,
+    0.97,
+    0.2,
+    0.21
+   ],
+   [
+    -0.18,
+    -0.21,
+    0.99,
+    0.23,
+    0.99,
+    0.99
+   ]
+  ],
+  "beto": {
+   "Pan": 0.98,
+   "Mantequilla": 0.97,
+   "Leche": 0.31,
+   "Cereal": 0.74,
+   "Pañales": -0.41,
+   "Toallitas": -0.41
+  },
+  "perdida": {
+   "1": 60.6,
+   "2": 41.8,
+   "3": 33.3,
+   "5": 24.3,
+   "15": 12.3
+  },
+  "X": [
+   [
+    -1.62,
+    5.02
+   ],
+   [
+    -3.03,
+    3.18
+   ],
+   [
+    2.99,
+    2.09
+   ],
+   [
+    -1.38,
+    4.88
+   ],
+   [
+    2.95,
+    2.06
+   ]
+  ],
+  "Y": [
+   [
+    -0.17,
+    0.15
+   ],
+   [
+    -0.17,
+    0.14
+   ],
+   [
+    0.16,
+    0.25
+   ],
+   [
+    -0.05,
+    0.18
+   ],
+   [
+    0.25,
+    0.11
+   ],
+   [
+    0.26,
+    0.11
+   ]
+  ]
+ },
+ "7_contenido": {
+  "perfil_beto": [
+   1.0,
+   0.5,
+   0.5,
+   0.0,
+   0.0
+  ],
+  "beto": {
+   "Pan": 0.87,
+   "Mantequilla": 0.87,
+   "Leche": 0.71,
+   "Cereal": 0.87,
+   "Pañales": 0.0,
+   "Toallitas": 0.0,
+   "Avena": 0.87
+  },
+  "fede": {
+   "Pan": 0.0,
+   "Mantequilla": 0.0,
+   "Leche": 0.41,
+   "Cereal": 0.0,
+   "Pañales": 1.0,
+   "Toallitas": 1.0,
+   "Avena": 0.0
+  }
+ },
+ "8_two_tower": {
+  "perdida": {
+   "1": 0.711,
+   "100": 0.421,
+   "500": 0.413,
+   "2000": 0.401
+  },
+  "beto": {
+   "Pan": 0.93,
+   "Mantequilla": 0.99,
+   "Leche": 0.6,
+   "Cereal": 0.69,
+   "Pañales": 0.02,
+   "Toallitas": 0.03,
+   "Avena": 0.84
+  },
+  "fede": {
+   "Pan": 0.09,
+   "Mantequilla": 0.11,
+   "Leche": 0.63,
+   "Cereal": 0.19,
+   "Pañales": 0.91,
+   "Toallitas": 0.89,
+   "Avena": 0.16
+  }
+ },
+ "9_gru4rec": {
+  "perdida": {
+   "1": 1.691,
+   "50": 0.824,
+   "200": 0.796,
+   "400": 0.793
+  },
+  "siguiente": {
+   "Pan → Cereal": {
+    "Pan": 0.04,
+    "Mantequilla": 0.02,
+    "Leche": 0.79,
+    "Cereal": 0.13,
+    "Pañales": 0.01,
+    "Toallitas": 0.02
+   },
+   "Pan → Leche": {
+    "Pan": 0.06,
+    "Mantequilla": 0.01,
+    "Leche": 0.04,
+    "Cereal": 0.86,
+    "Pañales": 0.02,
+    "Toallitas": 0.0
+   },
+   "Pañales → Leche": {
+    "Pan": 0.02,
+    "Mantequilla": 0.01,
+    "Leche": 0.06,
+    "Cereal": 0.01,
+    "Pañales": 0.02,
+    "Toallitas": 0.88
+   }
+  }
+ },
+ "10_sasrec": {
+  "perdida": {
+   "1": 1.897,
+   "50": 0.815,
+   "200": 0.789,
+   "400": 0.785
+  },
+  "siguiente": {
+   "Pan → Cereal": {
+    "Pan": 0.04,
+    "Mantequilla": 0.02,
+    "Leche": 0.77,
+    "Cereal": 0.14,
+    "Pañales": 0.01,
+    "Toallitas": 0.02
+   },
+   "Pan → Leche": {
+    "Pan": 0.06,
+    "Mantequilla": 0.02,
+    "Leche": 0.04,
+    "Cereal": 0.86,
+    "Pañales": 0.02,
+    "Toallitas": 0.0
+   },
+   "Pañales → Leche": {
+    "Pan": 0.02,
+    "Mantequilla": 0.01,
+    "Leche": 0.06,
+    "Cereal": 0.01,
+    "Pañales": 0.02,
+    "Toallitas": 0.88
+   }
+  },
+  "atencion": {
+   "Pan → Cereal": {
+    "Pan": 0.55,
+    "Cereal": 0.45
+   },
+   "Pan → Leche": {
+    "Pan": 0.67,
+    "Leche": 0.33
+   },
+   "Pañales → Leche": {
+    "Pañales": 0.44,
+    "Leche": 0.56
+   }
+  }
+ }
+}
